@@ -10,6 +10,9 @@ import java.io.*;
 public class BinaryGuessPlayer implements Player
 {
 
+    private DataHolder gameData;
+    private Character chosenCharacter;
+
     /**
      * Loads the game configuration from gameFilename, and also store the chosen
      * person.
@@ -25,6 +28,11 @@ public class BinaryGuessPlayer implements Player
         throws IOException
     {
 
+        gameData = new DataHolder(gameFilename);
+        chosenCharacter = gameData.getCharacterFronName(chosenName);
+
+        System.out.printf("Player has chosen: \n%s",chosenCharacter);
+
     } // end of BinaryGuessPlayer()
 
 
@@ -37,6 +45,15 @@ public class BinaryGuessPlayer implements Player
 
 	public boolean answer(Guess currGuess) {
 
+        switch(currGuess.getType()){
+
+            case Attribute:
+                return chosenCharacter.hasAttribute(currGuess.getAttribute(),currGuess.getValue());
+            case Person:
+                return chosenCharacter.Name.equals(currGuess.getValue());
+        }
+
+
         // placeholder, replace
         return false;
     } // end of answer()
@@ -44,8 +61,13 @@ public class BinaryGuessPlayer implements Player
 
 	public boolean receiveAnswer(Guess currGuess, boolean answer) {
 
-        // placeholder, replace
-        return true;
+        if (currGuess.getType().equals(Guess.GuessType.Attribute)){
+            gameData.RemoveAllOfAttribute(new Attribute(currGuess.getAttribute(), currGuess.getValue()), !answer);
+            return false;
+        }else{
+            return answer;
+        }
     } // end of receiveAnswer()
+
 
 } // end of class BinaryGuessPlayer

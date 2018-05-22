@@ -59,7 +59,6 @@ public class DataHolder
 
     private Character CreatePlayer(String line, Character currentChar){
         if (line.trim().isEmpty() &&  !currentChar.Name.isEmpty()){
-                System.out.printf("\n%s",currentChar);
                 AllCharacters.add(currentChar);
 
             return new Character();
@@ -92,6 +91,31 @@ public class DataHolder
         return false;
     }
 
+    public Character getCharacterFronName(String Name){
+
+        for (Character character : AllCharacters) {
+            if (character.Name.equals(Name))
+            return character;
+
+        }
+        return null;
+    }
+
+    public void RemoveAllOfAttribute(Attribute attribute, Boolean hasAttribute){
+
+        Character[] AllCharacterCopy = AllCharacters.toArray(new Character[AllCharacters.size()]);
+
+        System.out.printf("%sRemoving: %s",ANSI_RED,ANSI_RESET);
+        for (Character character : AllCharacterCopy) {
+            if (character.hasAttribute(attribute) == hasAttribute){
+                System.out.printf("%s, ",character.Name);
+                AllCharacters.remove(character);
+
+            }
+        }
+        System.out.print("\n");
+        System.out.printf("%sRemaining: %s%s\n",ANSI_RED,ANSI_RESET,AllCharacters.size());
+    }
 
 
 }

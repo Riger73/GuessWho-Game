@@ -10,9 +10,6 @@ public class AttributeType{
     public AttributeType(String Name, String[] Values){
         this.Name = Name;
         this.Values = Values;
-
-        System.out.println("Created: " + this.toString());
-
     }
 
     public AttributeType(String[] Values){
@@ -40,6 +37,17 @@ public class AttributeType{
             retVal += value + ", ";
         }
         retVal = retVal.substring(0, retVal.length() - 2);
+        return retVal;
+    }
+
+    public Attribute[] GetAllAttributes(){
+        
+        Attribute[] retVal = new Attribute[Values.length];
+
+        for (int i = 0; i < Values.length; i++){
+            retVal[i] = new Attribute(Name, Values[i]);
+        }
+
         return retVal;
     }
 }

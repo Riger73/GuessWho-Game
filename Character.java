@@ -19,6 +19,24 @@ public class Character{
             retVal += attribute.toString() + "\n";
         }
         return retVal;
+    
+    }
+
+    public boolean hasAttribute(Attribute attribute){
+        for (Attribute characterAttribute : CharacterAttributes) {
+            if (attribute.equals(characterAttribute))
+                return true;
+        }
+
+        return false;
+    }
+
+    public boolean hasAttribute(String Name, String Value){   
+        return hasAttribute(new Attribute(Name,Value));
+    }
+
+    public Guess toGuess(){
+        return new Guess(Guess.GuessType.Person,"",Name);
     }
 
 }
