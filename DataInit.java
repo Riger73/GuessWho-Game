@@ -12,8 +12,8 @@ import java.util.List;
 
 public class DataInit{
     //Array to store attribute types.
-    protected static String[] attributes = { "name", "hairlength", "gender", "eyecolour", 
-    		"headwear", "haircolour", "origin", "agegroup"};
+    protected static String[] attributes = {"hairLength", "glasses", "facialHair", "eyeColor", "pimples",
+	    		"hat", "hairColor", "noseShape", "faceShape"};
     private static List<String> attList = Arrays.asList(attributes);
 	    
     public static Person[] LoadData(String gameFilename) throws IOException{
@@ -57,25 +57,31 @@ public class DataInit{
                 String hairlength = temp[1];
                 
                 temp = (loadData.readLine()).split("\\s+");
-                String gender = temp[1];
+                String glasses = temp[1];
                 
                 temp = (loadData.readLine()).split("\\s+");
-                String eyecolour = temp[1];	
+                String facialhair = temp[1];	
                 
                 temp = (loadData.readLine()).split("\\s+");
-                String headwear = temp[1];	
+                String eyecolor = temp[1];	
 
                 temp = (loadData.readLine()).split("\\s+");
-                String haircolour = temp[1];	
+                String pimples = temp[1];	
 
                 temp = (loadData.readLine()).split("\\s+");
-                String origin = temp[1];	
+                String hat = temp[1];	
 
                 temp = (loadData.readLine()).split("\\s+");
-                String agegroup = temp[1];	
+                String haircolor = temp[1];	
 
-                Person person = new Person(name, hairlength, gender, eyecolour, 
-                		headwear, haircolour, origin, agegroup);
+                temp = (loadData.readLine()).split("\\s+");
+                String noseshape = temp[1];
+
+                temp = (loadData.readLine()).split("\\s+");
+                String faceshape = temp[1];	
+
+                Person person = new Person(name, hairlength, glasses, facialhair, eyecolor, pimples, hat, 
+                		haircolor, noseshape, faceshape);
 
                 people[counter] = person;
                 counter++;
@@ -139,4 +145,3 @@ public class DataInit{
         return map;
     }   
 }
-
