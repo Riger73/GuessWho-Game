@@ -71,5 +71,3 @@ public class Person{
 	public boolean isDown(){
 		return isDown;
 	}
-
-}

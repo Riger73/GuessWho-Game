@@ -23,12 +23,14 @@ public class BinaryGuessPlayer implements Player
      *    implementation exits gracefully if an IOException is thrown.
      */
 	
+
     private Person[] chosenCharacter;
     protected Person chosen;
     private static ArrayList<String> knownAttr = new ArrayList<String>();
     HashMap<String, ArrayList<String>> gameData = new HashMap<String, ArrayList<String>>();
     protected static String[] attributes = { "name", "hairLength", "glasses", "facialHair", "eyeColor",
     "pimples", "hat", "hairColor", "noseShape", "faceShape" };
+
     
     HashMap<String, Integer> setCnt = new HashMap<String, Integer>();
     
@@ -37,6 +39,7 @@ public class BinaryGuessPlayer implements Player
     public BinaryGuessPlayer(String gameFilename, String chosenName)
         throws IOException
     {
+
         gameData = DataInit.LoadValues(gameFilename);
         chosenCharacter = DataInit.LoadData(gameFilename);
         
@@ -44,6 +47,7 @@ public class BinaryGuessPlayer implements Player
             if ((chosenCharacter[i].get("name")).equals(chosenName)) {
                 chosen = chosenCharacter[i];
                 chosenCharacter = DataInit.LoadData(gameFilename);
+
             }
             playerNum++;
         }
@@ -55,12 +59,14 @@ public class BinaryGuessPlayer implements Player
 
         // placeholder, replace
         int players = 0;
+
         for (int i = 0; i < chosenCharacter.length; i++) {
             if (chosenCharacter[i] != null) {
                 players++;
                 for (int j = 0; j < attributes.length; j++) {
                     String value = attributes[j];
                     String attribute = chosenCharacter[i].get(value);
+
                     String keys = value + " " + attribute;
                     if (!setCnt.containsKey(keys)) {
                     	setCnt.put(keys, 1);
@@ -118,10 +124,12 @@ public class BinaryGuessPlayer implements Player
             }
             
         } else {
+
             for (int i = 0; i < chosenCharacter.length; i++) {
                 if (chosenCharacter[i] != null) {
                     setCnt.clear();
                     return new Guess(Guess.GuessType.Person, "", chosenCharacter[i].get("name"));
+
                 }
             }
         }
@@ -151,20 +159,24 @@ public class BinaryGuessPlayer implements Player
 	public boolean receiveAnswer(Guess currGuess, boolean answer) {
         if (currGuess.getType().equals(Guess.GuessType.Attribute)) {
             if (answer == false) {
+
                 for (int i = 0; i < chosenCharacter.length; i++) {
                     if (chosenCharacter[i] != null) {
                         String attribute = currGuess.getAttribute();
                         String value = currGuess.getValue();
                         if ((chosenCharacter[i].get(attribute)).equals(value)) { 
                             chosenCharacter[i] = null;
+
                         }
                     }
                 }
             } else {
+
                 for (int i = 0; i < chosenCharacter.length; i++) {
                     if (chosenCharacter[i] != null) {
                         if (!currGuess.getValue().equals(chosenCharacter[i].get(currGuess.getAttribute()))) {
                             chosenCharacter[i] = null;
+
                         }
                     }
                 }
@@ -174,9 +186,11 @@ public class BinaryGuessPlayer implements Player
             if (answer == true) {
                 return true;
             } else {
+
                 for (int i = 0; i < chosenCharacter.length; i++) {
                     if ((chosenCharacter[i].get("name")).equals(currGuess.getValue())) {
                         chosenCharacter[i] = null;
+
                     }
                     
                 }
