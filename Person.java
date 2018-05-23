@@ -1,32 +1,26 @@
-
 public class Person{
 
 	protected String name;
 	protected String hairLength;
-	protected String glasses;
-	protected String facialHair;
-	protected String eyeColor;
-	protected String pimples;
-	protected String hat;
-	protected String hairColor;
-	protected String noseShape;
-	protected String faceShape;
+	protected String gender;
+	protected String eyeColour;
+	protected String headWear;
+	protected String hairColour;
+	protected String origin;
+	protected String ageGroup;
 	protected boolean isDown;
 	
-	public Person(String name, String hairLength, String glasses, String facialHair, String eyeColor, String pimples, String hat, String
-		hairColor, String noseShape, String faceShape){
+	public Person(String name, String hairLength, String gender, String eyeColour, String headWear, String hairColour, String origin, String ageGroup){
 
 		// Attributes for the character;
 		this.name = name;
 		this.hairLength = hairLength;
-		this.glasses = glasses;
-		this.facialHair = facialHair;
-		this.eyeColor = eyeColor;
-		this.pimples = pimples;
-		this.hat = hat;
-		this.hairColor = hairColor;
-		this.noseShape = noseShape;
-		this.faceShape = faceShape;
+		this.gender = gender;
+		this.eyeColour = eyeColour;
+		this.headWear = headWear;
+		this.hairColour = hairColour;
+		this.origin = origin;
+		this.ageGroup = ageGroup;
 	
 		// Variables to check if down or up;
 		boolean isDown = false;
@@ -48,22 +42,18 @@ public class Person{
 				return name;
 			case "hairLength":
 				return hairLength;
-			case "glasses":
-				return glasses;
-			case "facialHair": 
-				return facialHair;
-			case "eyeColor":
-				return eyeColor;
-			case "pimples":
-				return pimples;
-			case "hat":
-				return hat;
-			case "hairColor":
-				return hairColor;
-			case "noseShape":
-				return noseShape;
-			case "faceShape":
-				return faceShape;
+			case "gender":
+				return gender;
+			case "eyeColour":
+				return eyeColour;
+			case "headWear":
+				return headWear;
+			case "hairColour":
+				return hairColour;
+			case "origin":
+				return origin;
+			case "ageGroup":
+				return ageGroup;
 		}
 
 		return "Unknown";
