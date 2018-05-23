@@ -1,4 +1,3 @@
-
 public class Person{
 
 	protected String name;
@@ -72,5 +71,3 @@ public class Person{
 	public boolean isDown(){
 		return isDown;
 	}
-
-}
