@@ -23,10 +23,10 @@ public class BinaryGuessPlayer implements Player
      *    implementation exits gracefully if an IOException is thrown.
      */
 	
-    private Person[] people;
+    private Person[] chosenCharacter;
     protected Person chosen;
     private static ArrayList<String> knownAttr = new ArrayList<String>();
-    HashMap<String, ArrayList<String>> map = new HashMap<String, ArrayList<String>>();
+    HashMap<String, ArrayList<String>> gameData = new HashMap<String, ArrayList<String>>();
     protected static String[] attributes = { "name", "hairLength", "glasses", "facialHair", "eyeColor",
     "pimples", "hat", "hairColor", "noseShape", "faceShape" };
     
@@ -37,13 +37,13 @@ public class BinaryGuessPlayer implements Player
     public BinaryGuessPlayer(String gameFilename, String chosenName)
         throws IOException
     {
-        map = DataInit.LoadValues(gameFilename);
-        people = DataInit.LoadData(gameFilename);
+        gameData = DataInit.LoadValues(gameFilename);
+        chosenCharacter = DataInit.LoadData(gameFilename);
         
-        for (int i = 0; i < people.length; i++) {
-            if ((people[i].get("name")).equals(chosenName)) {
-                chosen = people[i];
-                people = DataInit.LoadData(gameFilename);
+        for (int i = 0; i < chosenCharacter.length; i++) {
+            if ((chosenCharacter[i].get("name")).equals(chosenName)) {
+                chosen = chosenCharacter[i];
+                chosenCharacter = DataInit.LoadData(gameFilename);
             }
             playerNum++;
         }
@@ -55,12 +55,12 @@ public class BinaryGuessPlayer implements Player
 
         // placeholder, replace
         int players = 0;
-        for (int i = 0; i < people.length; i++) {
-            if (people[i] != null) {
+        for (int i = 0; i < chosenCharacter.length; i++) {
+            if (chosenCharacter[i] != null) {
                 players++;
                 for (int j = 0; j < attributes.length; j++) {
                     String value = attributes[j];
-                    String attribute = people[i].get(value);
+                    String attribute = chosenCharacter[i].get(value);
                     String keys = value + " " + attribute;
                     if (!setCnt.containsKey(keys)) {
                     	setCnt.put(keys, 1);
@@ -118,10 +118,10 @@ public class BinaryGuessPlayer implements Player
             }
             
         } else {
-            for (int i = 0; i < people.length; i++) {
-                if (people[i] != null) {
+            for (int i = 0; i < chosenCharacter.length; i++) {
+                if (chosenCharacter[i] != null) {
                     setCnt.clear();
-                    return new Guess(Guess.GuessType.Person, "", people[i].get("name"));
+                    return new Guess(Guess.GuessType.Person, "", chosenCharacter[i].get("name"));
                 }
             }
         }
@@ -151,20 +151,20 @@ public class BinaryGuessPlayer implements Player
 	public boolean receiveAnswer(Guess currGuess, boolean answer) {
         if (currGuess.getType().equals(Guess.GuessType.Attribute)) {
             if (answer == false) {
-                for (int i = 0; i < people.length; i++) {
-                    if (people[i] != null) {
+                for (int i = 0; i < chosenCharacter.length; i++) {
+                    if (chosenCharacter[i] != null) {
                         String attribute = currGuess.getAttribute();
                         String value = currGuess.getValue();
-                        if ((people[i].get(attribute)).equals(value)) {
-                            people[i] = null;
+                        if ((chosenCharacter[i].get(attribute)).equals(value)) { 
+                            chosenCharacter[i] = null;
                         }
                     }
                 }
             } else {
-                for (int i = 0; i < people.length; i++) {
-                    if (people[i] != null) {
-                        if (!currGuess.getValue().equals(people[i].get(currGuess.getAttribute()))) {
-                            people[i] = null;
+                for (int i = 0; i < chosenCharacter.length; i++) {
+                    if (chosenCharacter[i] != null) {
+                        if (!currGuess.getValue().equals(chosenCharacter[i].get(currGuess.getAttribute()))) {
+                            chosenCharacter[i] = null;
                         }
                     }
                 }
@@ -174,9 +174,9 @@ public class BinaryGuessPlayer implements Player
             if (answer == true) {
                 return true;
             } else {
-                for (int i = 0; i < people.length; i++) {
-                    if ((people[i].get("name")).equals(currGuess.getValue())) {
-                        people[i] = null;
+                for (int i = 0; i < chosenCharacter.length; i++) {
+                    if ((chosenCharacter[i].get("name")).equals(currGuess.getValue())) {
+                        chosenCharacter[i] = null;
                     }
                     
                 }
@@ -186,4 +186,3 @@ public class BinaryGuessPlayer implements Player
     } // end of receiveAnswer()
 
 } // end of class BinaryGuessPlayer
-
