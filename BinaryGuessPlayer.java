@@ -27,8 +27,8 @@ public class BinaryGuessPlayer implements Player
     protected Person chosen;
     private static ArrayList<String> knownAttr = new ArrayList<String>();
     HashMap<String, ArrayList<String>> map = new HashMap<String, ArrayList<String>>();
-    protected static String[] attributes = { "hairLgth", "", "gender", "eyeColor", "sex", "headWear",
-    "hairCol", "origin", "ageGroup" };
+    protected static String[] attributes = { "name", "hairLength", "glasses", "facialHair", "eyeColor",
+    "pimples", "hat", "hairColor", "noseShape", "faceShape" };
     
     HashMap<String, Integer> setCnt = new HashMap<String, Integer>();
     
@@ -186,3 +186,4 @@ public class BinaryGuessPlayer implements Player
     } // end of receiveAnswer()
 
 } // end of class BinaryGuessPlayer
+
