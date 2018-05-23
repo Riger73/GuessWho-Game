@@ -12,8 +12,8 @@ import java.util.List;
 
 public class DataInit{
     //Array to store attribute types.
-    protected static String[] attributes = {"hairLength", "glasses", "facialHair", "eyeColor", "pimples",
-	    		"hat", "hairColor", "noseShape", "faceShape"};
+    protected static String[] attributes = { "name", "hairlength", "gender", "eyecolour", 
+    		"headwear", "haircolour", "origin", "agegroup"};
     private static List<String> attList = Arrays.asList(attributes);
 	    
     public static Person[] LoadData(String gameFilename) throws IOException{
@@ -57,31 +57,25 @@ public class DataInit{
                 String hairlength = temp[1];
                 
                 temp = (loadData.readLine()).split("\\s+");
-                String glasses = temp[1];
+                String gender = temp[1];
                 
                 temp = (loadData.readLine()).split("\\s+");
-                String facialhair = temp[1];	
+                String eyecolour = temp[1];	
                 
                 temp = (loadData.readLine()).split("\\s+");
-                String eyecolor = temp[1];	
+                String headwear = temp[1];	
 
                 temp = (loadData.readLine()).split("\\s+");
-                String pimples = temp[1];	
+                String haircolour = temp[1];	
 
                 temp = (loadData.readLine()).split("\\s+");
-                String hat = temp[1];	
+                String origin = temp[1];	
 
                 temp = (loadData.readLine()).split("\\s+");
-                String haircolor = temp[1];	
+                String agegroup = temp[1];	
 
-                temp = (loadData.readLine()).split("\\s+");
-                String noseshape = temp[1];
-
-                temp = (loadData.readLine()).split("\\s+");
-                String faceshape = temp[1];	
-
-                Person person = new Person(name, hairlength, glasses, facialhair, eyecolor, pimples, hat, 
-                		haircolor, noseshape, faceshape);
+                Person person = new Person(name, hairlength, gender, eyecolour, 
+                		headwear, haircolour, origin, agegroup);
 
                 people[counter] = person;
                 counter++;
