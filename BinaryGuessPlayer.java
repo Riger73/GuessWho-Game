@@ -1,4 +1,6 @@
 import java.io.*;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * Binary-search based guessing player.
@@ -9,10 +11,6 @@ import java.io.*;
  */
 public class BinaryGuessPlayer implements Player
 {
-
-    private DataHolder gameData;
-    private Character chosenCharacter;
-
     /**
      * Loads the game configuration from gameFilename, and also store the chosen
      * person.
@@ -24,50 +22,167 @@ public class BinaryGuessPlayer implements Player
      *    the "throws IOException" method specification, but make sure your
      *    implementation exits gracefully if an IOException is thrown.
      */
+	
+    private Person[] people;
+    protected Person chosen;
+    private static ArrayList<String> knownAttr = new ArrayList<String>();
+    HashMap<String, ArrayList<String>> map = new HashMap<String, ArrayList<String>>();
+    protected static String[] attributes = { "hairLgth", "", "gender", "eyeColor", "sex", "headWear",
+    "hairCol", "origin", "ageGroup" };
+    
+    HashMap<String, Integer> setCnt = new HashMap<String, Integer>();
+    
+    protected int playerNum = 0;
+    
     public BinaryGuessPlayer(String gameFilename, String chosenName)
         throws IOException
     {
-
-        gameData = new DataHolder(gameFilename);
-        chosenCharacter = gameData.getCharacterFronName(chosenName);
-
-        System.out.printf("Player has chosen: \n%s",chosenCharacter);
-
+        map = DataInit.LoadValues(gameFilename);
+        people = DataInit.LoadData(gameFilename);
+        
+        for (int i = 0; i < people.length; i++) {
+            if ((people[i].get("name")).equals(chosenName)) {
+                chosen = people[i];
+                people = DataInit.LoadData(gameFilename);
+            }
+            playerNum++;
+        }
+        
     } // end of BinaryGuessPlayer()
 
 
     public Guess guess() {
 
         // placeholder, replace
-        return new Guess(Guess.GuessType.Person, "", "Placeholder");
+        int players = 0;
+        for (int i = 0; i < people.length; i++) {
+            if (people[i] != null) {
+                players++;
+                for (int j = 0; j < attributes.length; j++) {
+                    String value = attributes[j];
+                    String attribute = people[i].get(value);
+                    String keys = value + " " + attribute;
+                    if (!setCnt.containsKey(keys)) {
+                    	setCnt.put(keys, 1);
+                    } else {
+                        int cnt = setCnt.get(keys);
+                        cnt++;
+                        setCnt.put(keys, cnt);
+                    }
+                }
+            }
+        }
+        if (players != 1) {
+        	//Array for attribute occurences.
+            int[] attribOccur = new int[players]; 
+            int valCnt;
+            
+            for (String key : setCnt.keySet()) {
+            	valCnt = setCnt.get(key);
+                for(int i = 0; i < attribOccur.length; i++) {
+                    if(attribOccur[i] == 0) {
+                        attribOccur[i] = valCnt; 
+                        i = attribOccur.length;
+                    }
+                }
+            }
+            
+            int targ = players/2;
+            int difference = Math.abs(attribOccur[0] - targ); 
+            int idx = 0;
+            
+            for(int i = 0; i < attribOccur.length; i++) {
+                int similarity = Math.abs(attribOccur[i] - targ);
+                if(similarity < difference) {
+                    idx = i;
+                    difference = similarity;
+                }
+            }
+            for (String key : setCnt.keySet()) {
+                if (setCnt.get(key).equals(targ) && !knownAttr.contains(key)) {
+                    String[] split = key.split(" ");
+                    knownAttr.add(key);
+                    setCnt.clear();
+                    return new Guess(Guess.GuessType.Attribute, split[0], split[1]);
+                }
+                
+            }
+
+            for (String key : setCnt.keySet()) {
+                if (setCnt.get(key).equals(attribOccur[idx]) && !knownAttr.contains(key)) {
+                    String[] split = key.split(" ");
+                    knownAttr.add(key);
+                    setCnt.clear();
+                    return new Guess(Guess.GuessType.Attribute, split[0], split[1]);
+                }
+            }
+            
+        } else {
+            for (int i = 0; i < people.length; i++) {
+                if (people[i] != null) {
+                    setCnt.clear();
+                    return new Guess(Guess.GuessType.Person, "", people[i].get("name"));
+                }
+            }
+        }
+            
+        return null;
     } // end of guess()
 
 
 	public boolean answer(Guess currGuess) {
 
-        switch(currGuess.getType()){
-
-            case Attribute:
-                return chosenCharacter.hasAttribute(currGuess.getAttribute(),currGuess.getValue());
-            case Person:
-                return chosenCharacter.Name.equals(currGuess.getValue());
+        if (currGuess.getType().equals(Guess.GuessType.Attribute)) {
+            if (currGuess.getValue().equals(chosen.get(currGuess.getAttribute()))) {
+                return true;
+            } else {
+                return false;
+            }
+        } else {
+            if (chosen.get("name").equals(currGuess.getValue())) {
+                return true;
+            } else {
+                return false;
+            }
         }
-
-
-        // placeholder, replace
-        return false;
     } // end of answer()
 
 
 	public boolean receiveAnswer(Guess currGuess, boolean answer) {
-
-        if (currGuess.getType().equals(Guess.GuessType.Attribute)){
-            gameData.RemoveAllOfAttribute(new Attribute(currGuess.getAttribute(), currGuess.getValue()), !answer);
+        if (currGuess.getType().equals(Guess.GuessType.Attribute)) {
+            if (answer == false) {
+                for (int i = 0; i < people.length; i++) {
+                    if (people[i] != null) {
+                        String attribute = currGuess.getAttribute();
+                        String value = currGuess.getValue();
+                        if ((people[i].get(attribute)).equals(value)) {
+                            people[i] = null;
+                        }
+                    }
+                }
+            } else {
+                for (int i = 0; i < people.length; i++) {
+                    if (people[i] != null) {
+                        if (!currGuess.getValue().equals(people[i].get(currGuess.getAttribute()))) {
+                            people[i] = null;
+                        }
+                    }
+                }
+            }
             return false;
-        }else{
-            return answer;
+        } else {
+            if (answer == true) {
+                return true;
+            } else {
+                for (int i = 0; i < people.length; i++) {
+                    if ((people[i].get("name")).equals(currGuess.getValue())) {
+                        people[i] = null;
+                    }
+                    
+                }
+            }
         }
+        return false;
     } // end of receiveAnswer()
-
 
 } // end of class BinaryGuessPlayer
