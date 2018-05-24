@@ -32,25 +32,30 @@ public class RandomGuessPlayer implements Player
         throws IOException
     {
 
+        //Instantaite board and get chosen chararacter
         gameData = new DataHolder(gameFilename);
-        chosenCharacter = gameData.getCharacterFronName(chosenName);
+        chosenCharacter = gameData.getCharacterFromName(chosenName);
 
-        System.out.printf("Player has chosen: \n%s",chosenCharacter);
-    } // end of RandomGuessPlayer()
+        //print the chosen character
+        System.out.printf("Player has chosen: \n%s\n",chosenCharacter);
+
+    } // end of BinaryGuessPlayer()
 
 
+    
+    /**
+     * Gets the playes next guess
+     */
     public Guess guess() {
 
-        //getRandom Character
-
-        if (gameData.AllCharacters.size() == 1){
+        //if only one character left guess that character
+        if (gameData.AllCharacters.size() == 1)
             return gameData.AllCharacters.get(0).toGuess();
-        }else if (gameData.AllCharacters.size() < 1)
-            return new Guess(Guess.GuessType.Person, "", "I have no one left to guess");
 
-
+        //Instantaiate new rand
         Random rand = new Random();
 
+        //get all Attributes left in game
         Attribute[] possibleAttributes = getAttributesInGame();
         Attribute guess = possibleAttributes[(int)rand.nextInt(possibleAttributes.length)];
 
@@ -58,36 +63,68 @@ public class RandomGuessPlayer implements Player
     } // end of guess()
 
 
-    public boolean answer(Guess currGuess) {
+    /**
+     * Returns if an input guess is true or false
+     * 
+     * @param currGuess guess to evaluate
+     * @return true if guess is correct else false
+     */
+	public boolean answer(Guess currGuess) {
 
+        //Switch for character or attribute guesses
         switch(currGuess.getType()){
 
+            //return if chosen play has that attribute
             case Attribute:
                 return chosenCharacter.hasAttribute(currGuess.getAttribute(),currGuess.getValue());
+            
+            //return if chosen player is that person
             case Person:
                 return chosenCharacter.Name.equals(currGuess.getValue());
-        }
+        }//end switch
 
-
-        // placeholder, replace
+        //should never get here
         return false;
     } // end of answer()
 
 
+	/**
+     * How player responds to guess answer
+     * 
+     * @param currGuess the guess this player attempted
+     * @param answer response to guess from other player
+     * @param return if player has finished with game
+     */
 	public boolean receiveAnswer(Guess currGuess, boolean answer) {
+
+        //if attribute type guess
         if (currGuess.getType().equals(Guess.GuessType.Attribute)){
+
+            //remove all characters with attributes opposite of the response from the guess
             gameData.RemoveAllOfAttribute(new Attribute(currGuess.getAttribute(), currGuess.getValue()), !answer);
+
+            //if all characters are removed (shouldn't be possible) respond no guesses left
+            if (gameData.AllCharacters.size() < 1)
+                return true;
+
+            //keep guessing
             return false;
+        
+        //if player guess
         }else{
+            //if false keep guessing, else they finish guessing since they know the character
             return answer;
         }
     } // end of receiveAnswer()
 
 
+    //returns a list of all attributes left in game
     private Attribute[] getAttributesInGame(){
 
+        //declar retVal as array list
         List<Attribute> retVal = new ArrayList<Attribute>();
 
+        //loops through all attributeson all characters
         for (Character character : gameData.AllCharacters) {     
             for (Attribute characterAttribute : character.CharacterAttributes) {
                 if (!retVal.contains(characterAttribute))

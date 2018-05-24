@@ -1,21 +1,34 @@
 import java.util.*;
 import java.io.*;
 
+/**
+ * Class to hold all possible values of an Attribute
+ */
 public class AttributeType{
 
-
+    //name of group
     public String Name;
+    //all possible values
     public String[] Values;
 
+    /**
+     * Constructer
+     */
     public AttributeType(String Name, String[] Values){
         this.Name = Name;
         this.Values = Values;
     }
 
+    /**
+     * Constructer which just uses the first value of the array as the name
+     */
     public AttributeType(String[] Values){
             this(Values[0],Arrays.copyOfRange(Values, 1, Values.length));
     }
 
+    /**
+     * Checks if an Attribute is part of this group
+     */
     public Boolean contains(Attribute input){
 
         boolean hasValue = false;
@@ -29,6 +42,9 @@ public class AttributeType{
         return(Name.equals(input.Name)) && hasValue;
     }
 
+    /**
+     * Returns AttributeType as an readable string
+     */
     public String toString(){
 
         String retVal = DataHolder.ANSI_GREEN + Name + ": " + DataHolder.ANSI_RESET;
@@ -40,14 +56,4 @@ public class AttributeType{
         return retVal;
     }
 
-    public Attribute[] GetAllAttributes(){
-        
-        Attribute[] retVal = new Attribute[Values.length];
-
-        for (int i = 0; i < Values.length; i++){
-            retVal[i] = new Attribute(Name, Values[i]);
-        }
-
-        return retVal;
-    }
 }
